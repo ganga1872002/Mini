@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fashion Item Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 40px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="file"] {
+            margin: 15px 0;
+        }
+
+        .preview {
+            margin-top: 20px;
+        }
+
+        .result {
+            margin-top: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        img {
+            max-width: 200px;
+            margin-top: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fashion Item Predictor</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Select a grayscale image (28x28 pixels):</label><br>
+        <input type="file" name="image" accept="image/*" onchange="previewImage(event)" required><br>
+        <button type="submit">Predict</button>
+    </form>
+
+    <div class="preview">
+        <p><strong>Image Preview:</strong></p>
+        <img id="image-preview" src="#" alt="Image Preview" style="display:none;">
+    </div>
+
+    {% if predicted_class %}
+        <div class="result">
+            Predicted Class: {{ predicted_class }}
+        </div>
+        {% if filename %}
+            <img src="{{ filename }}" alt="Uploaded Image">
+        {% endif %}
+    {% endif %}
+
+    <script>
+        function previewImage(event) {
+            const preview = document.getElementById('image-preview');
+            preview.src = URL.createObjectURL(event.target.files[0]);
+            preview.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
